@@ -1,7 +1,7 @@
 import { fn } from '@storybook/test';
 import { TextField } from './TextField';
 import { useArgs } from '@storybook/preview-api';
-import React from 'react';
+import React,{useState} from 'react';
 
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -15,18 +15,24 @@ export default {
 };
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const UseArgs = {
-  render: (args) => {
-    const [, setArgs] = useArgs();
-    return (
-      <TextField
-        {...args}
-        onChange={(e) => setArgs({ value: e.target.value })}
-      />
-    );
-  },
-  args: { defaultvalue: 'test' },
-};
+export const UseArgs = () => {
+  const [args, setArgs] = useArgs();
+  const [value, setValue] = useState(args.value);
+
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    setArgs({ value: newValue });
+  };
+
+  return (
+    <TextField
+      {...args}
+      value={value}
+      onChange={handleInputChange}
+    />
+  );
+}
 
 export const UseArgs2 = {
   render: () => {
